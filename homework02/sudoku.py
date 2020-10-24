@@ -17,6 +17,7 @@ def display(grid: List[List[str]]) -> None:
         if str(row) in '25':
             print(line)
     print()
+    
 
 
 def group(values: List[str], n: int) -> List[List[str]]:
