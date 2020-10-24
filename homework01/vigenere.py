@@ -16,15 +16,15 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
         if chr(letter_new) == ' ':
             ciphertext += ' '
             continue
-        if letter_new >= ord('A') and letter_new <= ord('Z'):
-            if key >= ord('A') and key <= ord('Z'):
+        if ord("A") <= letter_new <= ord("Z"):
+            if ord("A") <= key <= ord("Z"):
                 ciphertext += chr(
                     (letter_new - ord('A') + key - ord('A')) % 26 + ord('A'))
             else:
                 ciphertext += chr(
                     (letter_new + key - ord('A') - ord('a')) % 26 + ord('A'))
-        elif letter_new >= ord("a") and letter_new <= ord("z"):
-            if key >= ord('A') and key <= ord('Z'):
+        elif ord("a") <= letter_new <= ord("z"):
+            if ord("A") <= key <= ord("Z"):
                 ciphertext += chr(
                     (letter_new + key - ord('a') - ord('A')) % 26 + ord('a'))
             else:
@@ -53,15 +53,15 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
         if chr(letter_new) == ' ':
             plaintext += ' '
             continue
-        if letter_new >= ord('A') and letter_new <= ord('Z'):
-            if key >= ord('A') and key <= ord('Z'):
+        if ord("A") <= letter_new <= ord("Z"):
+            if ord("A") <= key <= ord("Z"):
                 plaintext += chr(
                     (letter_new - ord('A') - key + ord('A')) % 26 + ord('A'))
             else:
                 plaintext += chr(
                     (letter_new - ord('A') - key + ord('a')) % 26 + ord('A'))
-        elif letter_new >= ord('a') and letter_new <= ord('z'):
-            if key >= ord('A') and key <= ord('Z'):
+        elif ord("a") <= letter_new <= ord("z"):
+            if ord("A") <= key <= ord("Z"):
                 plaintext += chr(
                     (letter_new - ord('a') - key + ord('A')) % 26 + ord('a'))
             else:
