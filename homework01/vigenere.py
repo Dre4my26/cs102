@@ -13,6 +13,9 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     for i in range(len(plaintext)):
       letter_new = ord(plaintext[i])
       key = ord(keyword[i % len(keyword)])
+      if chr(letter_new) == ' ':
+        ciphertext += ' '
+        continue
       if letter_new >= ord('A') and letter_new <= ord('Z'):
         if key >= ord('A') and key <= ord('Z'):
           ciphertext += chr((letter_new - ord('A') + key - ord('A')) % 26 + ord('A'))
@@ -53,3 +56,4 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
         else:
           plaintext += chr((letter_new - ord('a') - key + ord('a')) % 26 + ord('a'))
     return plaintext
+    
