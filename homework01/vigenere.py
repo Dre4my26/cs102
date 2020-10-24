@@ -45,15 +45,17 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     for i in range(len(ciphertext)):
       letter_new = ord(ciphertext[i])
       key = ord(keyword[i % len(keyword)])
+      if chr(letter_new) == ' ':
+        plaintext += ' '
+        continue
       if letter_new >= ord('A') and letter_new <= ord('Z'):
         if key >= ord('A') and key <= ord('Z'):
           plaintext += chr((letter_new - ord('A') - key + ord('A')) % 26 + ord('A'))
         else:
-          plaintext += chr((letter_new - ord('A ') - key + ord('a')) % 26 + ord('A'))
+          plaintext += chr((letter_new - ord('A') - key + ord('a')) % 26 + ord('A'))
       elif letter_new >= ord('a') and letter_new <= ord('z'):
         if key >= ord('A') and key <= ord('Z'):
           plaintext += chr((letter_new - ord('a') - key + ord('A')) % 26 + ord('a'))
         else:
           plaintext += chr((letter_new - ord('a') - key + ord('a')) % 26 + ord('a'))
     return plaintext
-    
