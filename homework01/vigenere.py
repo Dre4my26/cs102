@@ -10,7 +10,28 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     'LXFOPVEFRNHR'
     """
     ciphertext = ""
-    # PUT YOUR CODE HERE
+    for i in range(len(plaintext)):
+        letter_new = ord(plaintext[i])
+        key = ord(keyword[i % len(keyword)])
+        if chr(letter_new) == ' ':
+            ciphertext += ' '
+            continue
+        if ord("A") <= letter_new <= ord("Z"):
+            if ord("A") <= key <= ord("Z"):
+                ciphertext += chr(
+                    (letter_new - ord('A') + key - ord('A')) % 26 + ord('A'))
+            else:
+                ciphertext += chr(
+                    (letter_new + key - ord('A') - ord('a')) % 26 + ord('A'))
+        elif ord("a") <= letter_new <= ord("z"):
+            if ord("A") <= key <= ord("Z"):
+                ciphertext += chr(
+                    (letter_new + key - ord('a') - ord('A')) % 26 + ord('a'))
+            else:
+                ciphertext += chr(
+                    (letter_new - ord('a') + key - ord('a')) % 26 + ord('a'))
+        else:
+            ciphertext += chr(letter_new)
     return ciphertext
 
 
@@ -26,5 +47,26 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     'ATTACKATDAWN'
     """
     plaintext = ""
-    # PUT YOUR CODE HERE
+    for i in range(len(ciphertext)):
+        letter_new = ord(ciphertext[i])
+        key = ord(keyword[i % len(keyword)])
+        if chr(letter_new) == ' ':
+            plaintext += ' '
+            continue
+        if ord("A") <= letter_new <= ord("Z"):
+            if ord("A") <= key <= ord("Z"):
+                plaintext += chr(
+                    (letter_new - ord('A') - key + ord('A')) % 26 + ord('A'))
+            else:
+                plaintext += chr(
+                    (letter_new - ord('A') - key + ord('a')) % 26 + ord('A'))
+        elif ord("a") <= letter_new <= ord("z"):
+            if ord("A") <= key <= ord("Z"):
+                plaintext += chr(
+                    (letter_new - ord('a') - key + ord('A')) % 26 + ord('a'))
+            else:
+                plaintext += chr(
+                    (letter_new - ord('a') - key + ord('a')) % 26 + ord('a'))
+        else:
+            plaintext += chr(letter_new)
     return plaintext
