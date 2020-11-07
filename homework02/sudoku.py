@@ -118,19 +118,17 @@ def find_possible_values(
     >>> values = find_possible_values(grid, (0,2))
     >>> values == {'1', '2', '4'}
     True
-    >>> values = find_possible_values(grid, (4,7))
+    >>> values = find_possible_valsues(grid, (4,7))
     >>> values == {'2', '5', '9'}
     True
     """
-    return set(
-        {
-            str(i)
-            for i in range(1, 10)
-            if not str(i) in get_col(grid, pos)
-            and not str(i) in get_row(grid, pos)
-            and not str(i) in get_block(grid, pos)
-        }
-    )
+    return {
+        str(i)
+        for i in range(1, 10)
+        if not str(i) in get_col(grid, pos)
+        and not str(i) in get_row(grid, pos)
+        and not str(i) in get_block(grid, pos)
+    }
 
 
 def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
