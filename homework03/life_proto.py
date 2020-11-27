@@ -1,5 +1,6 @@
 import pygame
 import random
+import numpy as np
 
 from pygame.locals import *
 from typing import List, Tuple
@@ -11,8 +12,9 @@ Grid = List[Cells]
 
 
 class GameOfLife:
-
-    def __init__(self, width: int=640, height: int=480, cell_size: int=10, speed: int=10) -> None:
+    def __init__(
+        self, width: int = 640, height: int = 480, cell_size: int = 10, speed: int = 10
+    ) -> None:
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -29,21 +31,25 @@ class GameOfLife:
         # Скорость протекания игры
         self.speed = speed
 
+        self.grid = []
+
     def draw_lines(self) -> None:
         """ Отрисовать сетку """
         for x in range(0, self.width, self.cell_size):
-            pygame.draw.line(self.screen, pygame.Color('black'),
-                    (x, 0), (x, self.height))
+            pygame.draw.line(
+                self.screen, pygame.Color("black"), (x, 0), (x, self.height)
+            )
         for y in range(0, self.height, self.cell_size):
-            pygame.draw.line(self.screen, pygame.Color('black'),
-                    (0, y), (self.width, y))
+            pygame.draw.line(
+                self.screen, pygame.Color("black"), (0, y), (self.width, y)
+            )
 
     def run(self) -> None:
         """ Запустить игру """
         pygame.init()
         clock = pygame.time.Clock()
-        pygame.display.set_caption('Game of Life')
-        self.screen.fill(pygame.Color('white'))
+        pygame.display.set_caption("Game of Life")
+        self.screen.fill(pygame.Color("white"))
 
         # Создание списка клеток
         # PUT YOUR CODE HERE
@@ -63,7 +69,7 @@ class GameOfLife:
             clock.tick(self.speed)
         pygame.quit()
 
-    def create_grid(self, randomize: bool=False) -> Grid:
+    def create_grid(self, randomize: bool = False) -> Grid:
         """
         Создание списка клеток.
 
@@ -81,13 +87,48 @@ class GameOfLife:
         out : Grid
             Матрица клеток размером `cell_height` х `cell_width`.
         """
-        pass
+        if randomize == True:
+            random.seed(12345)
+            grid = [
+                [random.randint(0, 1) for j in range(self.cell_height)]
+                for i in range(self.cell_width)
+            ]
+            print(grid)
+            return grid
+        else:
+            Grid = [
+                [0 for j in range(self.cell_height)] for i in range(self.cell_width)
+            ]
+            return Grid
 
     def draw_grid(self) -> None:
         """
         Отрисовка списка клеток с закрашиванием их в соответствующе цвета.
         """
-        pass
+        for i in range(self.cell_height):
+            for j in range(self.cell_width):
+                if Grid[i][j] == 1:
+                    pygame.draw.rect(
+                        self.screen,
+                        pygame.Color("green"),
+                        (
+                            j * self.cell_size,
+                            i * self.cell_size,
+                            self.cell_size,
+                            self.cell_size,
+                        ),
+                    )
+                else:
+                    pygame.draw.rect(
+                        self.screen,
+                        pygame.Color("white"),
+                        (
+                            j * self.cell_size,
+                            i * self.cell_size,
+                            self.cell_size,
+                            self.cell_size,
+                        ),
+                    )
 
     def get_neighbours(self, cell: Cell) -> Cells:
         """
@@ -107,7 +148,72 @@ class GameOfLife:
         out : Cells
             Список соседних клеток.
         """
-        pass
+        i = cell[0]
+        j = cell[1]
+
+        neighbours = []
+        if (i - self.cell_size >= 0) and (j - self.cell_size >= 0):
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+            else:
+                neighbours.append(0)
+        else:
+            neighbours.append(0)
+        if i - self.cell_size >= 0:
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+        else:
+            neighbours.append(0)
+        if (i - self.cell_size >= 0) and (
+            j + self.cell_size <= self.cell_width * self.cell_size
+        ):
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+            else:
+                neighbours.append(0)
+        else:
+            neighbours.append(0)
+        if j - self.cell_size >= 0:
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+            else:
+                neighbours.append(0)
+        else:
+            neighbours.append(0)
+        if j + self.cell_size <= self.cell_width * self.cell_size:
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+            else:
+                neighbours.append(0)
+        else:
+            neighbours.append(0)
+        if (i + self.cell_size <= self.cell_height * self.cell_size) and (
+            j - self.cell_size >= 0
+        ):
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+            else:
+                neighbours.append(0)
+        else:
+            neighbours.append(0)
+        if i + self.cell_size <= self.cell_height * self.cell_size:
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+            else:
+                neighbours.append(0)
+        else:
+            neighbours.append(0)
+        if (i + self.cell_size <= self.cell_height * self.cell_size) and (
+            j + self.cell_size <= self.cell_width * self.cell_size
+        ):
+            if self.grid[i][j] == 1:
+                neighbours.append(1)
+            else:
+                neighbours.append(0)
+        else:
+            neighbours.append(0)
+        print(neighbours)
+        return neighbours
 
     def get_next_generation(self) -> Grid:
         """
@@ -119,3 +225,6 @@ class GameOfLife:
             Новое поколение клеток.
         """
         pass
+
+
+# GameOfLife.create_grid(GameOfLife(3, 3, 1), False)
