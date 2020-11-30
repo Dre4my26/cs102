@@ -2,6 +2,9 @@ import pygame
 import random
 import numpy as np
 
+from copy import deepcopy
+from itertools import product
+
 from pygame.locals import *
 from typing import List, Tuple
 
@@ -130,6 +133,9 @@ class GameOfLife:
                         ),
                     )
 
+    def _is_valid_cell(self, candidate: Cell) -> bool:
+        return 0 <= candidate[0] < len(self.grid) and 0 <= candidate[1] < len(self.grid[0])
+
     def get_neighbours(self, cell: Cell) -> Cells:
         """
         Вернуть список соседних клеток для клетки `cell`.
@@ -148,71 +154,19 @@ class GameOfLife:
         out : Cells
             Список соседних клеток.
         """
-        i = cell[0]
-        j = cell[1]
 
         neighbours = []
-        if (i - self.cell_size >= 0) and (j - self.cell_size >= 0):
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-            else:
-                neighbours.append(0)
-        else:
-            neighbours.append(0)
-        if i - self.cell_size >= 0:
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-        else:
-            neighbours.append(0)
-        if (i - self.cell_size >= 0) and (
-            j + self.cell_size <= self.cell_width * self.cell_size
-        ):
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-            else:
-                neighbours.append(0)
-        else:
-            neighbours.append(0)
-        if j - self.cell_size >= 0:
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-            else:
-                neighbours.append(0)
-        else:
-            neighbours.append(0)
-        if j + self.cell_size <= self.cell_width * self.cell_size:
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-            else:
-                neighbours.append(0)
-        else:
-            neighbours.append(0)
-        if (i + self.cell_size <= self.cell_height * self.cell_size) and (
-            j - self.cell_size >= 0
-        ):
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-            else:
-                neighbours.append(0)
-        else:
-            neighbours.append(0)
-        if i + self.cell_size <= self.cell_height * self.cell_size:
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-            else:
-                neighbours.append(0)
-        else:
-            neighbours.append(0)
-        if (i + self.cell_size <= self.cell_height * self.cell_size) and (
-            j + self.cell_size <= self.cell_width * self.cell_size
-        ):
-            if self.grid[i][j] == 1:
-                neighbours.append(1)
-            else:
-                neighbours.append(0)
-        else:
-            neighbours.append(0)
-        print(neighbours)
+
+        deltas = [-1, 0, 1]
+        for dx, dy in product(deltas, deltas):
+            if (dx, dy) == (0, 0):
+                continue
+
+            row, col = cell[0] + dy, cell[1] + dx
+            if self._is_valid_cell((row, col)):
+                is_alive = self.grid[row][col]
+                neighbours.append(is_alive)
+
         return neighbours
 
     def get_next_generation(self) -> Grid:
@@ -224,7 +178,20 @@ class GameOfLife:
         out : Grid
             Новое поколение клеток.
         """
-        pass
+        out = deepcopy(self.grid)
+
+        for i in range(len(out)):
+            for j in range(len(out[i])):
+                alive_neighbours = sum(self.get_neighbours((i,j)))
+
+                if self.grid[i][j]:
+                    out[i][j] = int(2 <= alive_neighbours <= 3)
+                elif alive_neighbours == 3:
+                    out[i][j] = i
+
+        return out
 
 
-# GameOfLife.create_grid(GameOfLife(3, 3, 1), False)
+if __name__ == "__main__":
+    game = GameOfLife(320, 240, 20)
+    game.run()
