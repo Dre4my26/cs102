@@ -1,13 +1,14 @@
-import pygame
-import random
-import numpy as np
+"importing libraries"
+# pylint: disable=no-member, consider-using-enumerate
 
 from copy import deepcopy
 from itertools import product
-
-from pygame.locals import *
 from typing import List, Tuple
 
+import random
+import pygame
+
+from pygame.locals import *
 
 Cell = Tuple[int, int]
 Cells = List[int]
@@ -15,9 +16,16 @@ Grid = List[Cells]
 
 
 class GameOfLife:
+    """
+    implementing main funcs
+    """
+
     def __init__(
         self, width: int = 640, height: int = 480, cell_size: int = 10, speed: int = 10
     ) -> None:
+        """
+        pylint says I should add docstrings
+        """
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -38,13 +46,15 @@ class GameOfLife:
 
     def draw_lines(self) -> None:
         """ Отрисовать сетку """
-        for x in range(0, self.width, self.cell_size):
+        for width in range(0, self.width, self.cell_size):
             pygame.draw.line(
-                self.screen, pygame.Color("black"), (x, 0), (x, self.height)
+                self.screen, pygame.Color(
+                    "black"), (width, 0), (width, self.height)
             )
-        for y in range(0, self.height, self.cell_size):
+        for height in range(0, self.height, self.cell_size):
             pygame.draw.line(
-                self.screen, pygame.Color("black"), (0, y), (self.width, y)
+                self.screen, pygame.Color(
+                    "black"), (0, height), (self.width, height)
             )
 
     def run(self) -> None:
@@ -96,27 +106,25 @@ class GameOfLife:
                 [random.randint(0, 1) for j in range(self.cell_height)]
                 for i in range(self.cell_width)
             ]
-            print(grid)
-            return grid
         else:
-            Grid = [
+            grid = [
                 [0 for j in range(self.cell_height)] for i in range(self.cell_width)
             ]
-            return Grid
+        return grid
 
     def draw_grid(self) -> None:
         """
         Отрисовка списка клеток с закрашиванием их в соответствующе цвета.
         """
-        for i in range(self.cell_height):
-            for j in range(self.cell_width):
-                if Grid[i][j] == 1:
+        for height in range(self.cell_height):
+            for width in range(self.cell_width):
+                if Grid[height][width] == 1:
                     pygame.draw.rect(
                         self.screen,
                         pygame.Color("green"),
                         (
-                            j * self.cell_size,
-                            i * self.cell_size,
+                            width * self.cell_size,
+                            height * self.cell_size,
                             self.cell_size,
                             self.cell_size,
                         ),
@@ -126,15 +134,17 @@ class GameOfLife:
                         self.screen,
                         pygame.Color("white"),
                         (
-                            j * self.cell_size,
-                            i * self.cell_size,
+                            width * self.cell_size,
+                            height * self.cell_size,
                             self.cell_size,
                             self.cell_size,
                         ),
                     )
 
     def _is_valid_cell(self, candidate: Cell) -> bool:
-        return 0 <= candidate[0] < len(self.grid) and 0 <= candidate[1] < len(self.grid[0])
+        return 0 <= candidate[0] < len(self.grid) and 0 <= candidate[1] < len(
+            self.grid[0]
+        )
 
     def get_neighbours(self, cell: Cell) -> Cells:
         """
@@ -158,11 +168,11 @@ class GameOfLife:
         neighbours = []
 
         deltas = [-1, 0, 1]
-        for dx, dy in product(deltas, deltas):
-            if (dx, dy) == (0, 0):
+        for cord_dx, cord_dy in product(deltas, deltas):
+            if (cord_dx, cord_dy) == (0, 0):
                 continue
 
-            row, col = cell[0] + dy, cell[1] + dx
+            row, col = cell[0] + cord_dy, cell[1] + cord_dx
             if self._is_valid_cell((row, col)):
                 is_alive = self.grid[row][col]
                 neighbours.append(is_alive)
@@ -182,7 +192,7 @@ class GameOfLife:
 
         for i in range(len(out)):
             for j in range(len(out[i])):
-                alive_neighbours = sum(self.get_neighbours((i,j)))
+                alive_neighbours = sum(self.get_neighbours((i, j)))
 
                 if self.grid[i][j]:
                     out[i][j] = int(2 <= alive_neighbours <= 3)
