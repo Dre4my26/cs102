@@ -4,11 +4,10 @@
 from copy import deepcopy
 from itertools import product
 from typing import List, Tuple
+from pygame.locals import *
 
 import random
 import pygame
-
-from pygame.locals import *
 
 Cell = Tuple[int, int]
 Cells = List[int]
@@ -42,7 +41,7 @@ class GameOfLife:
         # Скорость протекания игры
         self.speed = speed
 
-        self.grid = []
+        self.grid: Grid = []
 
     def draw_lines(self) -> None:
         """ Отрисовать сетку """
@@ -65,21 +64,23 @@ class GameOfLife:
         self.screen.fill(pygame.Color("white"))
 
         # Создание списка клеток
-        # PUT YOUR CODE HERE
+        self.grid = self.create_grid(randomize=True)
 
         running = True
         while running:
             for event in pygame.event.get():
-                if event.type == QUIT:
+                if event.type == pygame.QUIT:
                     running = False
-            self.draw_lines()
 
             # Отрисовка списка клеток
+            self.draw_grid()
+            self.draw_lines()
             # Выполнение одного шага игры (обновление состояния ячеек)
-            # PUT YOUR CODE HERE
+            self.grid = self.get_next_generation()
 
             pygame.display.flip()
             clock.tick(self.speed)
+
         pygame.quit()
 
     def create_grid(self, randomize: bool = False) -> Grid:
@@ -101,7 +102,7 @@ class GameOfLife:
             Матрица клеток размером `cell_height` х `cell_width`.
         """
         if randomize == True:
-            random.seed(12345)
+
             grid = [
                 [random.randint(0, 1) for j in range(self.cell_height)]
                 for i in range(self.cell_width)
@@ -116,30 +117,17 @@ class GameOfLife:
         """
         Отрисовка списка клеток с закрашиванием их в соответствующе цвета.
         """
-        for height in range(self.cell_height):
-            for width in range(self.cell_width):
-                if Grid[height][width] == 1:
-                    pygame.draw.rect(
-                        self.screen,
-                        pygame.Color("green"),
-                        (
-                            width * self.cell_size,
-                            height * self.cell_size,
-                            self.cell_size,
-                            self.cell_size,
-                        ),
-                    )
-                else:
-                    pygame.draw.rect(
-                        self.screen,
-                        pygame.Color("white"),
-                        (
-                            width * self.cell_size,
-                            height * self.cell_size,
-                            self.cell_size,
-                            self.cell_size,
-                        ),
-                    )
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[i])):
+                cell_color = pygame.Color(
+                    "green") if self.grid[i][j] else pygame.Color("white")
+                rect = pygame.Rect(
+                    j * self.cell_size,
+                    i * self.cell_size,
+                    self.cell_size,
+                    self.cell_size,
+                )
+                pygame.draw.rect(self.screen, cell_color, rect)
 
     def _is_valid_cell(self, candidate: Cell) -> bool:
         return 0 <= candidate[0] < len(self.grid) and 0 <= candidate[1] < len(
@@ -205,3 +193,4 @@ class GameOfLife:
 if __name__ == "__main__":
     game = GameOfLife(320, 240, 20)
     game.run()
+    game.run().draw_grid()
