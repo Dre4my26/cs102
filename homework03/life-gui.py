@@ -1,8 +1,4 @@
-# pylint: disable=no-member
-# pylint: disable=missing-class-docstring
-# pylint: disable=missing-module-docstring
-# pylint: disable=missing-function-docstring
-# pyling: disable=unused-wildcard-import
+# pylint: disable=no-member ,missing-class-docstring, unused-wildcard-import, missing-module-docstring, missing-function-docstring
 
 import pygame  # type: ignore
 from pygame.locals import *  # type: ignore
