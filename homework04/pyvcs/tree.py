@@ -56,4 +56,3 @@ def commit_tree(
         data += f"parent {parent}\n"
     data += f"author {author} {timestamp} {tz_offset}\ncommitter {author} {timestamp} {tz_offset}\n\n{message}\n"
     return hash_object(data.encode(), "commit", write=True)
-    
