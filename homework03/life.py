@@ -1,10 +1,14 @@
+# pylint: disable=no-member
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-function-docstring
+
 import json
 import pathlib
 import random
 from copy import deepcopy
 from itertools import product
 from typing import List, Optional, Tuple
-
 
 Cell = Tuple[int, int]
 Cells = List[int]
@@ -16,17 +20,12 @@ class GameOfLife:
         self,
         size: Tuple[int, int],
         randomize: bool = True,
-        max_generations: Optional[float] = float("inf"),
+        max_generations: float = float("inf"),
     ) -> None:
-        # Размер клеточного поля
         self.rows, self.cols = size
-        # Предыдущее поколение клеток
         self.prev_generation = self.create_grid()
-        # Текущее поколение клеток
         self.curr_generation = self.create_grid(randomize=randomize)
-        # Максимальное число поколений
         self.max_generations = max_generations
-        # Текущее число поколений
         self.generations = 1
 
     def create_grid(self, randomize: bool = False) -> Grid:
@@ -39,15 +38,14 @@ class GameOfLife:
         return 0 <= candidate[0] < self.rows and 0 <= candidate[1] < self.cols
 
     def get_neighbours(self, cell: Cell) -> Cells:
-        # Copy from previous assignment
         neighbours = []
 
         deltas = [-1, 0, 1]
-        for cord_dx, cord_dy in product(deltas, deltas):
-            if (cord_dx, cord_dy) == (0, 0):
+        for d_x, d_y in product(deltas, deltas):
+            if (d_x, d_y) == (0, 0):
                 continue
 
-            row, col = cell[0] + cord_dy, cell[1] + cord_dx
+            row, col = cell[0] + d_y, cell[1] + d_x
             if self._is_valid_cell((row, col)):
                 is_alive = self.curr_generation[row][col]
                 neighbours.append(is_alive)
@@ -69,41 +67,27 @@ class GameOfLife:
         return out
 
     def step(self) -> None:
-        """
-        Выполнить один шаг игры.
-        """
         self.prev_generation = deepcopy(self.curr_generation)
         self.curr_generation = self.get_next_generation()
         self.generations += 1
 
     @property
     def is_max_generations_exceeded(self) -> bool:
-        """
-        Не превысило ли текущее число поколений максимально допустимое.
-        """
         return self.generations >= self.max_generations
 
     @property
     def is_changing(self) -> bool:
-        """
-        Изменилось ли состояние клеток с предыдущего шага.
-        """
         return self.prev_generation != self.curr_generation
 
     @staticmethod
     def from_file(filename: pathlib.Path) -> "GameOfLife":
-        """
-        Прочитать состояние клеток из указанного файла.
-        """
-        start_gen = []
-        with open(filename, "r") as game_file:
-            for line in game_file.readlines():
-                if not line == "\n":
-                    start_gen.append([int(i) for i in line if i in (0, 1)])
+        with open(filename, "r") as f:
+            curr_generation = json.load(f)
 
-        size = len(start_gen), len(start_gen[0])
+        size = len(curr_generation), len(curr_generation[0])
         game = GameOfLife(size=size, randomize=False)
-        game.curr_generation = start_gen
+        game.curr_generation = curr_generation
+
         return game
 
     def save(self, filename: pathlib.Path) -> None:
