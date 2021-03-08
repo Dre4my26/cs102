@@ -30,7 +30,10 @@ class Console(UI):
         self.draw_borders(screen)
 
         try:
-            while self.life.is_changing or not self.life.is_max_generations_exceeded:
+            while (
+                self.life.is_changing
+                or not self.life.is_max_generations_exceeded
+            ):
                 self.draw_borders(screen)
                 self.draw_grid(screen)
                 screen.refresh()
