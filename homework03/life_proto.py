@@ -46,15 +46,9 @@ class GameOfLife:
     def draw_lines(self) -> None:
         """ Отрисовать сетку """
         for width in range(0, self.width, self.cell_size):
-            pygame.draw.line(
-                self.screen, pygame.Color(
-                    "black"), (width, 0), (width, self.height)
-            )
+            pygame.draw.line(self.screen, pygame.Color("black"), (width, 0), (width, self.height))
         for height in range(0, self.height, self.cell_size):
-            pygame.draw.line(
-                self.screen, pygame.Color(
-                    "black"), (0, height), (self.width, height)
-            )
+            pygame.draw.line(self.screen, pygame.Color("black"), (0, height), (self.width, height))
 
     def run(self) -> None:
         """ Запустить игру """
@@ -108,9 +102,7 @@ class GameOfLife:
                 for i in range(self.cell_width)
             ]
         else:
-            grid = [
-                [0 for j in range(self.cell_height)] for i in range(self.cell_width)
-            ]
+            grid = [[0 for j in range(self.cell_height)] for i in range(self.cell_width)]
         return grid
 
     def draw_grid(self) -> None:
@@ -119,8 +111,7 @@ class GameOfLife:
         """
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
-                cell_color = pygame.Color(
-                    "green") if self.grid[i][j] else pygame.Color("white")
+                cell_color = pygame.Color("green") if self.grid[i][j] else pygame.Color("white")
                 rect = pygame.Rect(
                     j * self.cell_size,
                     i * self.cell_size,
@@ -130,9 +121,7 @@ class GameOfLife:
                 pygame.draw.rect(self.screen, cell_color, rect)
 
     def _is_valid_cell(self, candidate: Cell) -> bool:
-        return 0 <= candidate[0] < len(self.grid) and 0 <= candidate[1] < len(
-            self.grid[0]
-        )
+        return 0 <= candidate[0] < len(self.grid) and 0 <= candidate[1] < len(self.grid[0])
 
     def get_neighbours(self, cell: Cell) -> Cells:
         """
