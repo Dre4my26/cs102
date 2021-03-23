@@ -1,14 +1,19 @@
-# pylint: disable=no-member ,missing-class-docstring, unused-wildcard-import, missing-module-docstring, missing-function-docstring
+# pylint: disable=no-member ,missing-class-docstring, wildcard-import, unused-wildcard-import, missing-module-docstring, missing-function-docstring, unused-import
 
-import pygame  # type: ignore
-from pygame.locals import *  # type: ignore
+import pathlib
+
+import pygame  # pylint: disable=import-error
+from pygame.locals import *  # pylint: disable=import-error
+
 import life
 from life import GameOfLife
 from ui import UI
 
 
 class GUI(UI):
-    def __init__(self, life: GameOfLife, cell_size: int = 10, speed: int = 10) -> None:
+    def __init__(
+        self, life: GameOfLife, cell_size: int = 10, speed: int = 10
+    ) -> None:  # pylint: disable=redefined-outer-name
         super().__init__(life)
 
         self.width = self.life.cols * cell_size
@@ -55,9 +60,14 @@ class GUI(UI):
         pygame.display.set_caption("Game of Life")
         self.screen.fill(pygame.Color("white"))
 
+        self.life.curr_generation = self.life.create_grid(randomize=True)
+
         running = True
         pause = False
         while running:
+            self.draw_grid()
+            self.draw_lines()
+            pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -65,31 +75,33 @@ class GUI(UI):
                     (
                         y_c,
                         x_c,
-                    ) = pygame.mouse.get_pos()
+                    ) = (
+                        pygame.mouse.get_pos()
+                    )  # inverted due to graphics having a weird coordinate system
                     self.change_state((x_c, y_c))
                     self.draw_grid()
                     self.draw_lines()
-                    clock.tick(self.speed)
                     pygame.display.flip()
+                    clock.tick(self.speed)
                     continue
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
+                elif event.type == pygame.KEYDOWN:  # get event
+                    if event.key == pygame.K_SPACE:  # check pause key
                         if pause:
                             pause = False
                         else:
                             pause = True
-            if pause:
+
+            if pause:  # actually pause the game
                 continue
 
-            # Отрисовка списка клеток
-            self.draw_grid()
-            self.draw_lines()
-
             # Выполнение одного шага игры (обновление состояния ячеек)
-            self.life.step()
+            if self.life.is_changing and not self.life.is_max_generations_exceeded:
+                self.life.step()
+                pygame.display.flip()
+            else:
+                running = False
 
             clock.tick(self.speed)
-            pygame.display.flip()
         pygame.quit()
 
 
