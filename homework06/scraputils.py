@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 def extract_news(parser):
     """ Extract news from a given web page """
     news_list = []
+<<<<<<< HEAD
     news_dict = {'author', 'comments', 'points', 'title', 'link'}
     news_quantity = 0
 
@@ -13,6 +14,29 @@ def extract_news(parser):
         news_list.append(text.text)
         news_quantity += 1
 
+=======
+    
+    texts = parser.find_all('a', class_='storylink')
+    for text in texts:
+        print(text.text)
+
+    points = parser.find_all('span', class_='score')
+    for point in points:
+        print(point.text)
+
+    authors = parser.find_all('a', class_='hnuser')
+    for author in authors:
+        print(author.text)
+
+    links = parser.find_all('a', class_='storylink')
+    for link in links:
+        print(link.get('href'))
+    """
+    comments = parser.find_all('a')
+    print(comments)
+    """
+    return news_list
+>>>>>>> acd79e1331ef93b1e8d18964c47d4a44dad96e2d
 
     points = parser.find_all('span', class_='score')
     for point in points:
@@ -56,10 +80,15 @@ def extract_news(parser):
 
 def extract_next_page(parser):
     """ Extract next page URL """
+<<<<<<< HEAD
     next_page_link = parser.find_all('a', class_='morelink')
     next_page_link = next_page_link[0].get('href')
     return next_page_link
 
+=======
+    # PUT YOUR CODE HERE
+    return ""
+>>>>>>> acd79e1331ef93b1e8d18964c47d4a44dad96e2d
 
 def get_news(url, n_pages=1):
     """ Collect news from a given web page """
