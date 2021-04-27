@@ -13,6 +13,27 @@ def extract_news(parser):
         news_list.append(text.text)
         news_quantity += 1
 
+    
+    texts = parser.find_all('a', class_='storylink')
+    for text in texts:
+        print(text.text)
+
+    points = parser.find_all('span', class_='score')
+    for point in points:
+        print(point.text)
+
+    authors = parser.find_all('a', class_='hnuser')
+    for author in authors:
+        print(author.text)
+
+    links = parser.find_all('a', class_='storylink')
+    for link in links:
+        print(link.get('href'))
+    """
+    comments = parser.find_all('a')
+    print(comments)
+    """
+    return news_list
 
     points = parser.find_all('span', class_='score')
     for point in points:
@@ -56,10 +77,8 @@ def extract_news(parser):
 
 def extract_next_page(parser):
     """ Extract next page URL """
-    next_page_link = parser.find_all('a', class_='morelink')
-    next_page_link = next_page_link[0].get('href')
-    return next_page_link
-
+    # PUT YOUR CODE HERE
+    return ""
 
 def get_news(url, n_pages=1):
     """ Collect news from a given web page """
