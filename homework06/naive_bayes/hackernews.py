@@ -3,9 +3,8 @@ import pathlib
 import pickle
 import typing as tp
 
-from bottle import redirect, request, route, run, template
-
 import naive_bayes.stemmer
+from bottle import redirect, request, route, run, template
 from naive_bayes.bayes import NaiveBayesClassifier
 from naive_bayes.db import News, session
 from naive_bayes.scraputils import get_news
