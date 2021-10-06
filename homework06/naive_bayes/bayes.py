@@ -26,7 +26,7 @@ class NaiveBayesClassifier:
         self.word_probs: tp.DefaultDict[str, tp.DefaultDict[str, float]] = defaultdict(defaultdict)
 
     def fit(self, X: tp.List[str], y: tp.List[str]) -> None:
-        """ Fit Naive Bayes classifier according to X, y. """
+        """Fit Naive Bayes classifier according to X, y."""
         if not X or not y or not len(X) == len(y):
             raise ValueError("The training set is either unmarked or empty.")
         self.priors = Counter(y)
@@ -60,7 +60,7 @@ class NaiveBayesClassifier:
                 )
 
     def predict(self, X: tp.List[str]) -> tp.List[str]:
-        """ Perform classification on an array of test vectors X. """
+        """Perform classification on an array of test vectors X."""
         if (
             not self.priors
             or not self.unique_words
@@ -86,7 +86,7 @@ class NaiveBayesClassifier:
         return labels
 
     def score(self, X_test: tp.List[str], y_test: tp.List[str]) -> float:
-        """ Returns the mean accuracy on the given test data and labels. """
+        """Returns the mean accuracy on the given test data and labels."""
         predicted: tp.List[str] = self.predict(X_test)
         class_accuracies = defaultdict(float)
         for c in list(set(y_test)):
