@@ -1,7 +1,4 @@
-# Set working directory
-setwd("C:/Users/79111/Documents/R")
-
-df <- read.csv("howpop_train.csv", encoding="UTF-8")
+df <- read.csv("../howpop_train.csv", encoding="UTF-8")
 
 head(df)
 

@@ -1,8 +1,5 @@
-# Set working directory
-setwd("C:/Users/79111/Documents/R")
-
 # Read the date into a dataframe called adult
-adult <- read.csv("adult_data.csv", header=T)
+adult <- read.csv("../adult_data.csv", header=T)
 
 # What type of object is adult?
 class(adult)
