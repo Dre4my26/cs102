@@ -11,8 +11,7 @@ def extract_news(parser: BeautifulSoup) -> tp.List[tp.Dict[str, tp.Any]]:
     """ Extract news from a given web page """
     news_list: tp.List[tp.Dict[str, tp.Any]] = []
 
-    authors: tp.List[str] = [
-        i.text for i in parser.body.find_all("a", {"class": "hnuser"})]
+    authors: tp.List[str] = [i.text for i in parser.body.find_all("a", {"class": "hnuser"})]
     comments: tp.List[tp.Any] = [
         i for i in parser.body.find_all("a") if "item?id=" in i.attrs["href"]
     ]
@@ -25,8 +24,7 @@ def extract_news(parser: BeautifulSoup) -> tp.List[tp.Dict[str, tp.Any]]:
     points: tp.List[int] = [
         int(i.text[: i.text.find(" ")]) for i in parser.body.find_all("span", {"class": "score"})
     ]
-    titles: tp.List[str] = [
-        i.text for i in parser.body.find_all("a", {"class": "storylink"})]
+    titles: tp.List[str] = [i.text for i in parser.body.find_all("a", {"class": "storylink"})]
     urls: tp.List[str] = [
         i.attrs["href"] for i in parser.body.find_all("a", {"class": "storylink"})
     ]
