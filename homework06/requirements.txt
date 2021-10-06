@@ -17,3 +17,4 @@ sklearn==0.0
 SQLAlchemy==1.4.18
 sqlalchemy-stubs==0.4
 typing-extensions==3.10.0.0
+types-requests
