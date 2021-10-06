@@ -39,7 +39,7 @@ for sentence in extracts_test:
 print(len(unique_words_test))
 
 common_words = []
-for i in unique_words_test:
+for i in unique_words_test:  # type: ignore
     for j in unique_words_train:
         if i == j:
             common_words.append(i)
