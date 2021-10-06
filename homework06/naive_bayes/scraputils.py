@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 
 def extract_news(parser: BeautifulSoup) -> tp.List[tp.Dict[str, tp.Any]]:
-    """ Extract news from a given web page """
+    """Extract news from a given web page"""
     news_list: tp.List[tp.Dict[str, tp.Any]] = []
 
     authors: tp.List[str] = [i.text for i in parser.body.find_all("a", {"class": "hnuser"})]
